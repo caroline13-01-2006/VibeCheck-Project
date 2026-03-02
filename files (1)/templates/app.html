@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCheck</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+    <div class="sidebar-logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">VibeCheck</span>
+    </div>
+    <div class="nav-links">
+        <a href="#" class="nav-item active" data-slide="0"><span class="nav-icon">🏠</span><span>Home</span></a>
+        <a href="#" class="nav-item" data-slide="1"><span class="nav-icon">👤</span><span>Profile</span></a>
+        <a href="#" class="nav-item create-btn" data-slide="2"><span class="nav-icon">✦</span><span>Create</span></a>
+        <a href="#" class="nav-item" data-slide="3"><span class="nav-icon">📡</span><span>Feed</span></a>
+        <a href="#" class="nav-item" data-slide="4"><span class="nav-icon">⚙️</span><span>Settings</span></a>
+    </div>
+    <div class="sidebar-user">
+        <div class="user-mini">
+            <div class="user-avatar-sm" id="sidebar-avatar"></div>
+            <div class="user-info-sm">
+                <span class="user-name-sm" id="sidebar-name">...</span>
+                <span class="user-handle-sm" id="sidebar-handle">@...</span>
+            </div>
+        </div>
+        <a href="/logout" class="logout-btn" title="Logout">↩</a>
+    </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav">
+    <a href="#" class="mnav-item active" data-slide="0">🏠</a>
+    <a href="#" class="mnav-item" data-slide="1">👤</a>
+    <a href="#" class="mnav-item create-pulse" data-slide="2">✦</a>
+    <a href="#" class="mnav-item" data-slide="3">📡</a>
+    <a href="#" class="mnav-item" data-slide="4">⚙️</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="app-main">
+  <div class="slides-outer">
+    <div class="slides-track" id="slides-track">
+
+      <!-- SLIDE 0: HOME -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="home-welcome">
+            <h1>Welcome back,<br><em id="home-name">...</em> ⚡</h1>
+            <p>Your community is active. See what's happening today.</p>
+            <div class="home-actions">
+              <button class="btn-grad" onclick="goToSlide(3)">Explore Feed →</button>
+              <button class="btn-outline" onclick="goToSlide(2)">Create Post ✦</button>
+            </div>
+          </div>
+          <div class="home-stats">
+            <div class="stat-card">
+              <div class="stat-icon">📝</div>
+              <div class="stat-num" id="stat-posts">0</div>
+              <div class="stat-label">Your Posts</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">❤️</div>
+              <div class="stat-num" id="stat-likes">—</div>
+              <div class="stat-label">Likes Given</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">💬</div>
+              <div class="stat-num" id="stat-comments">—</div>
+              <div class="stat-label">Comments</div>
+            </div>
+          </div>
+          <div class="home-recent">
+            <h3>Recent Activity</h3>
+            <div id="home-recent-posts"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 1: PROFILE -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="profile-cover"></div>
+          <div class="profile-info-box">
+            <div class="avatar-row">
+              <div class="avatar-wrapper" onclick="document.getElementById('avatar-upload').click()">
+                <div class="profile-avatar" id="profile-avatar"></div>
+                <div class="avatar-overlay">📷</div>
+              </div>
+              <input type="file" id="avatar-upload" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+              <button class="btn-edit" onclick="openEditModal()">✏️ Edit Profile</button>
+            </div>
+            <div class="profile-meta">
+              <h2 id="profile-display-name">...</h2>
+              <p class="profile-handle" id="profile-username">@...</p>
+              <p class="profile-bio-text" id="profile-bio">No bio yet.</p>
+              <p class="profile-joined" id="profile-joined"></p>
+              <div class="profile-stats-row">
+                <div class="pstat"><span id="p-post-count">0</span><small>Posts</small></div>
+              </div>
+            </div>
+          </div>
+          <div class="profile-posts-section">
+            <h3>Posts</h3>
+            <div class="profile-posts-grid" id="profile-posts-grid">
+              <div class="loading-state"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: CREATE -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="create-wrap">
+            <h2 class="page-title">Create Post</h2>
+            <p class="page-subtitle">Share your vibe with the community ✨</p>
+            <div class="create-card">
+              <div class="create-user-row">
+                <div class="create-avatar" id="create-avatar"></div>
+                <span id="create-display-name">You</span>
+              </div>
+              <textarea id="post-content" class="post-textarea" placeholder="What's on your mind? ✨" maxlength="1000" oninput="updateCharCount(this)"></textarea>
+              <div class="char-count"><span id="char-count">0</span>/1000</div>
+              <div class="image-preview-wrapper" id="image-preview-wrapper" style="display:none">
+                <img id="image-preview" src="" alt="preview">
+                <button class="remove-image" onclick="removeImage()">✕</button>
+              </div>
+              <div class="create-actions">
+                <label class="attach-label" for="post-image">
+                  🖼️ Add Image
+                  <input type="file" id="post-image" accept="image/*" style="display:none" onchange="previewImage(this)">
+                </label>
+                <div class="create-right">
+                  <span class="mood-tag">✦ VIBE MODE</span>
+                  <button class="btn-grad" onclick="submitPost()">Post It ⚡</button>
+                </div>
+              </div>
+            </div>
+            <div class="post-success" id="post-success">
+              <span>🎉 Post published!</span>
+              <button onclick="goToSlide(3)">View in Feed →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: FEED -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="feed-header">
+            <h2>Live Feed 📡</h2>
+            <button class="refresh-btn" onclick="loadFeed()">↺ Refresh</button>
+          </div>
+          <div class="feed-container" id="feed-container">
+            <div class="loading-state"><div class="spinner"></div><p>Loading vibes...</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: SETTINGS -->
+      <div class="slide">
+        <div class="slide-inner">
+          <div class="settings-wrap">
+            <h2 class="page-title">Settings</h2>
+            <p class="page-subtitle" style="margin-bottom:28px">Manage your account preferences</p>
+
+            <div class="settings-section">
+              <h3>🎨 Appearance</h3>
+              <div class="setting-item">
+                <div class="setting-info"><span>Dark Mode</span><small>Toggle dark/light theme</small></div>
+                <label class="toggle">
+                  <input type="checkbox" id="dark-mode-toggle" checked onchange="toggleDarkMode(this)">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3>👤 Account</h3>
+              <div class="setting-item">
+                <div class="setting-info"><span>Display Name</span><small id="settings-display-name">—</small></div>
+                <button class="btn-sm" onclick="openEditModal()">Edit</button>
+              </div>
+              <div class="setting-item">
+                <div class="setting-info"><span>Username</span><small id="settings-username">—</small></div>
+              </div>
+              <div class="setting-item">
+                <div class="setting-info"><span>Profile Picture</span><small>Click avatar on Profile tab</small></div>
+                <button class="btn-sm" onclick="goToSlide(1)">Go →</button>
+              </div>
+            </div>
+
+            <div class="settings-section danger-section">
+              <h3>⚠️ Session</h3>
+              <div class="setting-item">
+                <div class="setting-info"><span>Sign Out</span><small>End your current session</small></div>
+                <a href="/logout" class="btn-danger">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end slides-track -->
+  </div><!-- end slides-outer -->
+</main>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit Profile</h3>
+      <button class="modal-close" onclick="closeModal('edit-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group"><label>Display Name</label><input type="text" id="edit-display-name" placeholder="Your name"></div>
+      <div class="input-group"><label>Bio</label><textarea id="edit-bio" placeholder="Tell the world about yourself..." rows="3"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="btn-grad" onclick="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMMENTS MODAL -->
+<div class="modal-overlay" id="comments-modal">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <h3>💬 Comments</h3>
+      <button class="modal-close" onclick="closeModal('comments-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="comments-list" id="comments-list">
+        <div class="loading-state"><div class="spinner"></div></div>
+      </div>
+      <div class="comment-input-row">
+        <div class="comment-user-avatar" id="comment-modal-avatar"></div>
+        <input type="text" id="comment-input" placeholder="Write a comment..." onkeydown="if(event.key==='Enter') submitComment()">
+        <button class="comment-submit" onclick="submitComment()">Send ⚡</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

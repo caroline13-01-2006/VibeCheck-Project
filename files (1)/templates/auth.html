@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCheck — Connect & Share</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grid-lines"></div>
+    </div>
+
+    <div class="auth-container">
+        <!-- Left Panel: Branding -->
+        <div class="brand-panel">
+            <div class="brand-logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">VibeCheck</span>
+            </div>
+            <h1 class="brand-headline">Where<br><em>Vibes</em><br>Meet.</h1>
+            <p class="brand-sub">Share moments. Spark conversations. Connect authentically.</p>
+            <div class="brand-stats">
+                <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Connections</span></div>
+                <div class="stat"><span class="stat-num">✦</span><span class="stat-label">Daily Vibes</span></div>
+                <div class="stat"><span class="stat-num">⚡</span><span class="stat-label">Live Feed</span></div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Auth Forms -->
+        <div class="form-panel">
+            <div class="tabs">
+                <button class="tab active" data-tab="login">Sign In</button>
+                <button class="tab" data-tab="register">Join Now</button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="form-wrapper active" id="login-form">
+                <h2>Welcome back</h2>
+                <p class="form-desc">Pick up where you left off</p>
+                <div class="error-msg" id="login-error"></div>
+
+                <div class="input-group">
+                    <label>Username or Email</label>
+                    <input type="text" id="login-username" placeholder="@yourhandle" autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <button class="btn-primary" onclick="handleLogin()">
+                    <span>Sign In</span>
+                    <span class="btn-icon">→</span>
+                </button>
+                <p class="switch-text">No account? <a href="#" onclick="switchTab('register')">Create one free</a></p>
+            </div>
+
+            <!-- Register Form -->
+            <div class="form-wrapper" id="register-form">
+                <h2>Create account</h2>
+                <p class="form-desc">Join thousands sharing their vibe</p>
+                <div class="error-msg" id="register-error"></div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>Display Name</label>
+                        <input type="text" id="reg-name" placeholder="Your name">
+                    </div>
+                    <div class="input-group">
+                        <label>Username</label>
+                        <input type="text" id="reg-username" placeholder="@handle">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="reg-email" placeholder="you@example.com">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" placeholder="Min 8 characters">
+                </div>
+                <button class="btn-primary" onclick="handleRegister()">
+                    <span>Create Account</span>
+                    <span class="btn-icon">✦</span>
+                </button>
+                <p class="switch-text">Have an account? <a href="#" onclick="switchTab('login')">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>
